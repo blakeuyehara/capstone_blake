@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'pageview.dart';
 
 /////////////////////////////
 // INDIVIDUAL SPORT PAGES //
@@ -34,15 +33,169 @@ import 'post.dart';
 import 'package:web_scraper/web_scraper.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:google_fonts/google_fonts.dart';
+import 'pageview.dart';
 
+//////////////////////////
+// WEB SCRAPING IMPORTS //
+//////////////////////////
 import 'package:http/http.dart';
 import 'webscrap1.dart' as webscraper1;
+//import 'streamLaunch.dart';
 
-void main() {
+//////////////////////
+// FOR WEB SCRAPING //
+//////////////////////
+Future main(List<String> arguments) async
+{
+  print(await webscraper1.initiate(Client()));
   runApp(MyApp());
-//   runApp(Post());
-  // runApp(PageViews());
 }
+
+//////////////////////////
+// FOR LIVE STREAM URL //
+/////////////////////////
+// class StreamLaunch extends StatefulWidget
+// {
+//   @override
+//   _StreamLaunch createState() => _StreamLaunch();
+// }
+//
+// class _StreamLaunch extends State<StreamLaunch>
+// {
+//   Future <void>? _launched;
+//
+//   Future <void> _launchURL(String url) async
+//   {
+//     if (await canLaunch(url))
+//     {
+//       await launch(url);
+//     }
+//
+//     else
+//     {
+//       throw 'COULD NOT LAUNCH $url';
+//     }
+//   }
+//
+// }
+
+// String _url = 'https://portal.stretchinternet.com/plu/#';
+//void _launchURL() async => await canLaunch(_url) ? await launch(_url) : throw 'Could NOT launch $_url';
+
+// class HomePageHeader implements SliverPersistentHeaderDelegate
+// {
+//   HomePageHeader(
+//   {
+//    // this.layoutGroup,
+//     this.onLayoutToggle,
+//     this.minExtent,
+//     this.maxExtent,
+//   });
+//
+//   //final LayoutGroup layoutGroup;
+//   final VoidCallback onLayoutToggle;
+//
+//   double minExtent;
+//   double maxExtent;
+//
+//   @override
+//   Widget build (BuildContext context, double shrinkOffset, bool overlapsContent)
+//   {
+//     return Stack(
+//       fit: StackFit.expand,
+//       children: [
+//         Image.asset('images/mtrack.jpg', fit: BoxFit.cover),
+//
+//         Container(
+//           decoration: BoxDecoration(
+//             gradient: LinearGradient(
+//               colors: [
+//                 Colors.transparent,
+//                 Colors.black54,
+//               ],
+//               stops: [0.5, 1.0],
+//               begin: Alignment.topCenter,
+//               end: Alignment.bottomCenter,
+//               tileMode: TileMode.repeated,
+//             ),
+//           ),
+//         ),
+//
+//         Positioned(
+//           left: 16.0,
+//           right: 16.0,
+//           bottom: 16.0,
+//           child: Text(
+//             'PLU ATHLETICS',
+//             style: TextStyle(fontSize: 30.0, color: Colors.white),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   @override
+//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate)
+//   {
+//     return true;
+//   }
+//
+//   @override
+//   FloatingHeaderSnapConfiguration get snapConfiguration => null;
+//
+//   @override
+//   OverScrollHeaderStretchConfiguration get stretchConfiguration => OverScrollHeaderStretchConfiguration();
+//
+//   @override
+//   PersistentHeaderShowOnScreenConfiguration get showOnScreenConfiguration => PersistentHeaderShowOnScreenConfiguration();
+//
+//   @override
+//   TickerProvider get vsync => throw UnimplementedError();
+// }
+//
+// class HomePage extends StatelessWidget
+// {
+//   HomePage ({Key key, this.onLayoutToggle}) : super(key: key);
+//
+//  // final LayoutGroup layoutGroup;
+//   final VoidCallback onLayoutToggle;
+//
+//   @override
+//   Widget build (BuildContext context)
+//   {
+//     return Scaffold(
+//       body: _customScrollView(context),
+//     );
+//   }
+//
+//   Widget _customScrollView (BuildContext context)
+//   {
+//     return Container(
+//       child: CustomScrollView(
+//         slivers: <Widget> [
+//           SliverPersistentHeader(
+//             pinned: true,
+//             delegate: HomePageHeader(
+//              // layoutGroup: layoutGroup,
+//               onLayoutToggle: onLayoutToggle,
+//               minExtent: 150.0,
+//               maxExtent: 250.0,
+//             )
+//           ),
+//         ]
+//       )
+//     );
+//
+//   }
+//}
+
+
+
+// void main() {
+//   runApp(MyApp());
+// //   runApp(Post());
+//   // runApp(PageViews());
+// }
 
 class MyApp extends StatelessWidget {
   // Root Widget of App
@@ -234,7 +387,6 @@ class SportsTiles extends StatelessWidget
             }
 
           }
-        //Navigator.push(c, MaterialPageRoute(builder: (context) => SecondPage())),
         // minLeadingWidth: 10.0,
       );
     }
@@ -249,73 +401,81 @@ class SportsTiles extends StatelessWidget
       children: t.children.map(_buildTiles).toList(),
     );
   }
-
-
 }
 
-// List <String> sports =
-// [
-//   'images/msoc.jpg',
-//   'images/wsoc.jpg',
-//   'images/mtrack.jpg',
-//   'images/mbsk.jpg',
-//   'images/sb.jpg',
-// ];
-
-class HomePage extends StatelessWidget
+class HomePage extends StatefulWidget
 {
+  @override
+  _HomePage createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage>
+{
+  _launchURL(String url)
+  {
+    launch(url);
+  }
+  // Future <void> _launched;
+
+  // Future <void> _launchURL(String url)
+  // {
+  //   return launch(url);
+  // }
+
   @override
   Widget build (BuildContext context)
   {
+    String _url = 'https://portal.stretchinternet.com/plu/#';
+
     return Scaffold (
         drawer: Drawer(
             child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget> [
                   DrawerHeader(
-                    child: Text("Welcome to Luteville", style: TextStyle(fontSize: 40.0)),
+                    child: Center( child: Text("Welcome to Luteville", style: TextStyle(fontSize: 40.0))),
                     decoration: BoxDecoration(color: Colors.amber),
                   ),
 
                   ListTile(
                       title: Text("Upcoming Events"),
-                    onTap: () async =>
-                    {
-                      await launch("https://golutes.com/calendar?vtype=list"),
-                      //Navigator.pop(context);
-                    },),
+                      onTap: () async => {
+                        await launch('https://golutes.com/calendar?vtype=list')
+                      }
+                  ),
 
                   ListTile(
-                      title: Text("Live Stream"),
-                      onTap: () async =>
-                      {
-                        await launch("https://portal.stretchinternet.com/plu/"),
-                        //Navigator.pop(context);
-                  },),
+                    // tileColor: Colors.grey,
+                    title: Text("Live Stream", style: TextStyle(color: Colors.black)),
+                    enableFeedback: true,
+                    onTap: () => _launchURL(_url),
+                    // onTap: () => setState(() {
+                    //   _launched = _launchURL(_url);
+                    // }),
+                  ),
 
                   ListTile(
-                    title: Text("News"),
-                    onTap: () async =>
-                    {
-                      await launch("https://golutes.com/archives"),
-                      //Navigator.pop(context);
-                    },),
+                    // tileColor: Colors.grey,
+                      title: Text("News"),
+                      enableFeedback: true,
+                      onTap: () => _launchURL('https://golutes.com/archives')
+                  ),
 
                   ListTile(
-                    title: Text("GoLutes Instagram"),
-                    onTap: () async =>
-                    {
-                      await launch("https://www.instagram.com/golutes/?hl=en"),
-                      //Navigator.pop(context);
-                    },),
+                    //tileColor: Colors.grey,
+                    title: Text("Feedback", style: TextStyle(color: Colors.black)),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
 
                   ListTile(
-                    title: Text("GoLutes Twitter Feed"),
-                    onTap: () async =>
-                    {
-                      await launch("https://twitter.com/golutes?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"),
-                      //Navigator.pop(context);
-                    },),
+                    //tileColor: Colors.grey,
+                    title: Text("Feedback", style: TextStyle(color: Colors.black)),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ]
             )
 
@@ -354,13 +514,97 @@ class HomePage extends StatelessWidget
                           children: <Widget> [SportsTiles(sports[index], context),],
                         ),
 
+
+
+                        /////////////////
+                        // OPTION !!! ///
+                        /////////////////
+                        // child: new SportsTiles(sports[index]),
+
+                        /////////////////
+                        // OPTION !!! ///
+                        /////////////////
+                        // child: ListView.builder(
+                        //     itemBuilder: (BuildContext context, int index) {
+                        //       return new SportsTiles(sports[index]);
+                        //     },
+                        // itemCount: sports.length,
+                        // ),
+
+                        /////////////////
+                        // OPTION !!! ///
+                        /////////////////
+                        // child: Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: <Widget> [
+                        //     ListView.builder(
+                        //         itemBuilder: (BuildContext context, int index)
+                        //     {
+                        //       return new SportsTiles(sports[index]);
+                        //     },
+                        //     itemCount: sports.length,
+                        //     ),
+                        //   ],
+                        // )
                       );
                     }, childCount: sports.length,
                   )
               ),
+
+              // SliverToBoxAdapter(
+              //   child: Center(
+              //     child: SizedBox(
+              //       height: 2000,
+              //       child: Text('Scroll'),
+              //     )
+              //   )
+              // ),
+
+              // SliverGrid(
+              //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              //     maxCrossAxisExtent: 200.0,
+              //     mainAxisExtent: 0.0,
+              //     crossAxisSpacing: 0.0,
+              //     childAspectRatio: 0.75,
+              //   ),
+              //
+              //   delegate: SliverChildBuilderDelegate(
+              //       (BuildContext context, int index)
+              //   {
+              //     return Container(
+              //       alignment: Alignment.center,
+              //       color: Colors.teal[100 * (index % 9)],
+              //       //color: Colors.transparent,
+              //      // padding: EdgeInsets.all(5.0),
+              //       child: Text("HELLO",
+              //       ),
+              //     );
+              //   },
+              //     childCount: 9,
+              //
+              //   ),
+              // )
+
+
             ]
 
         )
     );
   }
 }
+
+// class HomePage extends StatefulWidget
+// {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
+//
+// class _HomePageState extends State<HomePage> {
+//   @override
+//   Widget build (BuildContext context)
+//   {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('PLU Athletics')),
+//     );
+//   }
+// }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'webscrap1.dart';
 
 class WSOCPage extends StatefulWidget
 {
